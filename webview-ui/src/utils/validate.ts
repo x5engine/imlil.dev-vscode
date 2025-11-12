@@ -129,6 +129,11 @@ function validateModelsAndKeysProvided(apiConfiguration: ProviderSettings): stri
 				return i18next.t("settings:validation.apiKey")
 			}
 			break
+		case "embedapi":
+			if (!apiConfiguration.embedApiToken) {
+				return i18next.t("settings:validation.apiKey")
+			}
+			break
 		// kilocode_change end
 		case "huggingface":
 			if (!apiConfiguration.huggingFaceApiKey) {

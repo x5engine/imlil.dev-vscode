@@ -30,6 +30,18 @@ export const TranslationProvider: React.FC<{ children: ReactNode }> = ({ childre
 
 	useEffect(() => {
 		i18n.changeLanguage(extensionState.language)
+		
+		// Update document direction for RTL languages
+		const rtlLanguages = ["ar", "he", "fa", "ur"]
+		const lang = extensionState.language?.split("-")[0].toLowerCase() || "en"
+		const isRTL = rtlLanguages.includes(lang)
+		
+		// Update document direction
+		document.documentElement.dir = isRTL ? "rtl" : "ltr"
+		document.documentElement.lang = extensionState.language || "en"
+		
+		// Store in localStorage for persistence
+		localStorage.setItem("imlil-dev-direction", isRTL ? "rtl" : "ltr")
 	}, [i18n, extensionState.language])
 
 	// Memoize the translation function to prevent unnecessary re-renders

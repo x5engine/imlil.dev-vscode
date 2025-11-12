@@ -500,3 +500,114 @@ input[cmdk-input]:focus {
 	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 	transition-duration: 150ms;
 }
+
+/* RTL Support for Arabic and Right-to-Left Languages */
+[dir="rtl"] {
+	direction: rtl;
+	text-align: right;
+}
+
+[dir="rtl"] .chat-message,
+[dir="rtl"] .message-container {
+	flex-direction: row-reverse;
+}
+
+[dir="rtl"] .message-avatar {
+	margin-left: 0.75rem;
+	margin-right: 0;
+}
+
+[dir="rtl"] .message-content {
+	text-align: right;
+}
+
+/* Code blocks always stay LTR for readability */
+[dir="rtl"] pre,
+[dir="rtl"] code,
+[dir="rtl"] .code-block,
+[dir="rtl"] .hljs {
+	direction: ltr;
+	text-align: left;
+}
+
+/* Input fields and textareas */
+[dir="rtl"] input,
+[dir="rtl"] textarea {
+	text-align: right;
+}
+
+[dir="rtl"] input[type="text"],
+[dir="rtl"] input[type="search"] {
+	direction: rtl;
+}
+
+/* Buttons and controls */
+[dir="rtl"] .button-group,
+[dir="rtl"] .flex-row {
+	flex-direction: row-reverse;
+}
+
+/* Icons and spacing */
+[dir="rtl"] .icon-left {
+	margin-right: 0;
+	margin-left: 0.5rem;
+}
+
+[dir="rtl"] .icon-right {
+	margin-left: 0;
+	margin-right: 0.5rem;
+}
+
+/* Lists */
+[dir="rtl"] ul,
+[dir="rtl"] ol {
+	padding-right: 1.5rem;
+	padding-left: 0;
+}
+
+/* Dropdowns and menus */
+[dir="rtl"] .dropdown-menu,
+[dir="rtl"] .context-menu {
+	right: auto;
+	left: 0;
+	text-align: right;
+}
+
+/* Scrollbars (if custom styled) */
+[dir="rtl"] ::-webkit-scrollbar {
+	direction: rtl;
+}
+
+/* Chat input area */
+[dir="rtl"] .chat-input-container {
+	flex-direction: row-reverse;
+}
+
+[dir="rtl"] .chat-input {
+	text-align: right;
+}
+
+/* Settings and forms */
+[dir="rtl"] .form-group,
+[dir="rtl"] .settings-section {
+	text-align: right;
+}
+
+[dir="rtl"] .form-label {
+	text-align: right;
+}
+
+/* Tooltips */
+[dir="rtl"] .tooltip {
+	text-align: right;
+}
+
+/* Navigation and tabs */
+[dir="rtl"] .tab-list {
+	flex-direction: row-reverse;
+}
+
+[dir="rtl"] .nav-item {
+	margin-left: 0;
+	margin-right: 0.5rem;
+}

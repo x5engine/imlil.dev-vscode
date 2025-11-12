@@ -28,6 +28,7 @@ import { getOvhCloudAiEndpointsModels } from "./ovhcloud"
 import { getGeminiModels } from "./gemini"
 import { getInceptionModels } from "./inception"
 // kilocode_change end
+import { getEmbedAPIModels } from "./embedapi"
 
 import { getDeepInfraModels } from "./deepinfra"
 import { getHuggingFaceModels } from "./huggingface"
@@ -140,6 +141,13 @@ export const getModels = async (options: GetModelsOptions): Promise<ModelRecord>
 				models = await getOvhCloudAiEndpointsModels()
 				break
 			// kilocode_change end
+			case "embedapi":
+				models = await getEmbedAPIModels(
+					options.embedApiToken ?? "",
+					options.embedApiBaseUrl,
+					options.embedApiOrganizationId,
+				)
+				break
 			case "roo": {
 				// Roo Code Cloud provider requires baseUrl and optional apiKey
 				const rooBaseUrl =

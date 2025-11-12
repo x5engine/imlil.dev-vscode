@@ -54,6 +54,8 @@ import {
 import { KilocodeOpenrouterHandler } from "./providers/kilocode-openrouter"
 import { InceptionLabsHandler } from "./providers/inception"
 // kilocode_change end
+// EmbedAPI
+import { EmbedAPIHandler } from "./providers/embedapi/embedapi-handler"
 import { NativeOllamaHandler } from "./providers/native-ollama"
 
 export interface SingleCompletionHandler {
@@ -118,8 +120,15 @@ export interface ApiHandler {
 export function buildApiHandler(configuration: ProviderSettings): ApiHandler {
 	const { apiProvider, ...options } = configuration
 
+	// Priority: EmbedAPI if token exists (primary route)
+	if (options.embedApiToken) {
+		return new EmbedAPIHandler(options)
+	}
+
 	switch (apiProvider) {
 		// kilocode_change start
+		case "embedapi":
+			return new EmbedAPIHandler(options)
 		case "kilocode":
 			return new KilocodeOpenrouterHandler(options)
 		case "gemini-cli":

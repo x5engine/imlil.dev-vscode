@@ -133,6 +133,9 @@ export function constructLlmApi(config: LLMConfig): BaseLlmApi | undefined {
 			return openAICompatible("https://api.function.network/v1/", config)
 		case "openrouter":
 			return new OpenRouterApi(config)
+		case "embedapi":
+			// EmbedAPI is OpenAI-compatible, route through EmbedAPI base URL
+			return openAICompatible(config.apiBase ?? "https://api.embedapi.com/v1/", config)
 		case "llama.cpp":
 		case "llamafile":
 			return openAICompatible("http://localhost:8000/", config)

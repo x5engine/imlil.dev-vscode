@@ -26,6 +26,7 @@ export function checkExistKey(config: ProviderSettings | undefined) {
 		config.lmStudioModelId,
 		config.vsCodeLmModelSelector,
 		config.kilocodeModel, // kilocode_change
+		config.embedApiModel, // EmbedAPI
 	].some((value) => value !== undefined)
 
 	return hasSecretKey || hasOtherConfig

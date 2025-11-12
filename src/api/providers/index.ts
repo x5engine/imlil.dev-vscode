@@ -43,3 +43,6 @@ export { FeatherlessHandler } from "./featherless"
 export { VercelAiGatewayHandler } from "./vercel-ai-gateway"
 export { DeepInfraHandler } from "./deepinfra"
 export { MiniMaxHandler } from "./minimax"
+// EmbedAPI
+export { EmbedAPIHandler } from "./embedapi/embedapi-handler"
+export { EmbedAPIClient } from "./embedapi/embedapi-client"

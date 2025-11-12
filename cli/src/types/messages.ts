@@ -287,6 +287,13 @@ export interface ProviderSettings {
 	kilocodeModel?: string
 	kilocodeTesterWarningsDisabledUntil?: number
 
+	// EmbedAPI
+	embedApiToken?: string
+	embedApiOrganizationId?: string
+	embedApiBaseUrl?: string
+	embedApiModel?: string
+	embedApiPlan?: "solo" | "pro"
+
 	// Virtual Quota Fallback
 	profiles?: Array<{
 		profileName?: string

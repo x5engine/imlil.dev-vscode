@@ -54,6 +54,7 @@ export const dynamicProviders = [
 	"gemini",
 	"inception",
 	// kilocode_change end
+	"embedapi",
 	"deepinfra",
 	"io-intelligence",
 	"requesty",
@@ -154,6 +155,7 @@ export const providerNames = [
 	"synthetic",
 	"inception",
 	// kilocode_change end
+	"embedapi",
 	"sambanova",
 	"vertex",
 	"xai",
@@ -447,6 +449,17 @@ const kilocodeSchema = baseProviderSettingsSchema.extend({
 	kilocodeTesterWarningsDisabledUntil: z.number().optional(), // Timestamp for disabling KILOCODE-TESTER warnings
 })
 
+const embedapiSchema = baseProviderSettingsSchema.extend({
+	embedApiToken: z.string().optional(),
+	embedApiOrganizationId: z.string().optional(),
+	embedApiBaseUrl: z.string().optional(),
+	embedApiModel: z.string().optional(),
+	embedApiPlan: z.enum(["solo", "pro"]).optional(),
+	openRouterSpecificProvider: z.string().optional(),
+	openRouterProviderDataCollection: openRouterProviderDataCollectionSchema.optional(),
+	openRouterProviderSort: openRouterProviderSortSchema.optional(),
+})
+
 export const virtualQuotaFallbackProfileDataSchema = z.object({
 	profileName: z.string().optional(),
 	profileId: z.string().optional(),
@@ -544,6 +557,7 @@ export const providerSettingsSchemaDiscriminated = z.discriminatedUnion("apiProv
 	syntheticSchema.merge(z.object({ apiProvider: z.literal("synthetic") })),
 	inceptionSchema.merge(z.object({ apiProvider: z.literal("inception") })),
 	// kilocode_change end
+	embedapiSchema.merge(z.object({ apiProvider: z.literal("embedapi") })),
 	groqSchema.merge(z.object({ apiProvider: z.literal("groq") })),
 	huggingFaceSchema.merge(z.object({ apiProvider: z.literal("huggingface") })),
 	chutesSchema.merge(z.object({ apiProvider: z.literal("chutes") })),
@@ -581,6 +595,7 @@ export const providerSettingsSchema = z.object({
 	...ovhcloudSchema.shape,
 	...inceptionSchema.shape,
 	// kilocode_change end
+	...embedapiSchema.shape,
 	...openAiNativeSchema.shape,
 	...mistralSchema.shape,
 	...deepSeekSchema.shape,
@@ -643,6 +658,7 @@ export const modelIdKeys = [
 	"kilocodeModel",
 	"ovhCloudAiEndpointsModelId", // kilocode_change
 	"inceptionLabsModelId", // kilocode_change
+	"embedApiModel",
 ] as const satisfies readonly (keyof ProviderSettings)[]
 
 export type ModelIdKey = (typeof modelIdKeys)[number]
@@ -667,6 +683,7 @@ export const modelIdKeysByProvider: Record<TypicalProvider, ModelIdKey> = {
 	glama: "glamaModelId",
 	openrouter: "openRouterModelId",
 	kilocode: "kilocodeModel",
+	embedapi: "embedApiModel",
 	bedrock: "apiModelId",
 	vertex: "apiModelId",
 	"openai-native": "openAiModelId",
