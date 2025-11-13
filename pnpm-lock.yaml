@@ -332,8 +332,8 @@ importers:
   apps/web-evals:
     dependencies:
       '@hookform/resolvers':
-        specifier: ^5.1.1
-        version: 5.1.1(react-hook-form@7.57.0(react@18.3.1))
+        specifier: ^5.2.2
+        version: 5.2.2(react-hook-form@7.57.0(react@18.3.1))
       '@radix-ui/react-alert-dialog':
         specifier: ^1.1.7
         version: 1.1.13(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1663,6 +1663,9 @@ importers:
       '@cerebras/cerebras_cloud_sdk':
         specifier: ^1.35.0
         version: 1.46.0(encoding@0.1.13)
+      '@embedapi/core':
+        specifier: latest
+        version: 1.0.11(encoding@0.1.13)
       '@google/genai':
         specifier: ^1.0.0
         version: 1.3.0(@modelcontextprotocol/sdk@1.13.3)(encoding@0.1.13)
@@ -3985,6 +3988,9 @@ packages:
     resolution: {integrity: sha512-n9fRt/nzzOOZdDtTP3kT6GVdo0ro9FgMKCoS520kQMIiKBhpGmPny6yK/lER3tOCKr+wLYW1O25D9oI6ZinwCA==}
     engines: {node: '>=22.12.0'}
 
+  '@embedapi/core@1.0.11':
+    resolution: {integrity: sha512-DR0P5a1vka+CkslHTFF6V80mx09jaAos1bn8ORbrikZZ0SkW2liq5864KHPgr6CgBSCg27dFAdtz1BOVTntR5A==}
+
   '@emnapi/core@1.4.3':
     resolution: {integrity: sha512-4m62DuCE07lw01soJwPiBGC0nAww0Q+RY70VZ+n49yDIO13yyinhbWCeNnaob0lakDtWQzSdtNWzJeOJt2ma+g==}
 
@@ -4260,8 +4266,8 @@ packages:
   '@hapi/topo@5.1.0':
     resolution: {integrity: sha512-foQZKJig7Ob0BMAYBfcJk8d77QtOe7Wo4ox7ff1lQYoNNAb6jwcY1ncdoy2e9wQZzvNy7ODZCYJkK8kzmcAnAg==}
 
-  '@hookform/resolvers@5.1.1':
-    resolution: {integrity: sha512-J/NVING3LMAEvexJkyTLjruSm7aOFx7QX21pzkiJfMoNG0wl5aFEjLTl7ay7IQb9EWY6AkrBy7tHL2Alijpdcg==}
+  '@hookform/resolvers@5.2.2':
+    resolution: {integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==}
     peerDependencies:
       react-hook-form: ^7.55.0
 
@@ -22539,6 +22545,15 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@embedapi/core@1.0.11(encoding@0.1.13)':
+    dependencies:
+      cors: 2.8.5
+      express: 4.21.2
+      node-fetch: 2.7.0(encoding@0.1.13)
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+
   '@emnapi/core@1.4.3':
     dependencies:
       '@emnapi/wasi-threads': 1.0.2
@@ -22790,7 +22805,7 @@ snapshots:
     dependencies:
       '@hapi/hoek': 9.3.0
 
-  '@hookform/resolvers@5.1.1(react-hook-form@7.57.0(react@18.3.1))':
+  '@hookform/resolvers@5.2.2(react-hook-form@7.57.0(react@18.3.1))':
     dependencies:
       '@standard-schema/utils': 0.3.0
       react-hook-form: 7.57.0(react@18.3.1)
@@ -38565,7 +38580,7 @@ snapshots:
 
   spdy-transport@3.0.0:
     dependencies:
-      debug: 4.4.3
+      debug: 4.4.1(supports-color@8.1.1)
       detect-node: 2.1.0
       hpack.js: 2.1.6
       obuf: 1.1.2
