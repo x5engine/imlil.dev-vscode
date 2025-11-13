@@ -31,6 +31,7 @@ describe("getModelsByProvider", () => {
 			ovhcloud: { "test-model": testModel },
 			chutes: { "test-model": testModel },
 			inception: { "test-model": testModel },
+			embedapi: { "test-model": testModel },
 			roo: { "test-model": testModel },
 		}
 

@@ -65,10 +65,7 @@ export class EmbedAPIEmbedder implements IEmbedder {
 	 */
 	get embedderInfo(): EmbedderInfo {
 		return {
-			name: "EmbedAPI",
-			model: this.modelId,
-			maxItemTokens: MAX_ITEM_TOKENS,
+			name: "embedapi", // kilocode_change
 		}
 	}
 }
-

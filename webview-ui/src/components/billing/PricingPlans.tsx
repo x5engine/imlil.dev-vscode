@@ -1,6 +1,7 @@
 import React from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui"
 import { Button } from "@/components/ui/button"
+// kilocode_change start - billing components
 import { useAppTranslation } from "@/i18n/TranslationContext"
 import { Badge } from "@/components/ui/badge"
 
@@ -26,32 +27,32 @@ export const PricingPlans: React.FC<PricingPlansProps> = ({ currentPlan, onSelec
 	const plans: PricingPlan[] = [
 		{
 			id: "solo",
-			name: t("billing:plans.solo.name", "Solo Plan"),
-			description: t("billing:plans.solo.description", "Bring Your Own Key (BYOK)"),
+			name: t("billing:plans.solo.name"),
+			description: t("billing:plans.solo.description"),
 			features: [
-				t("billing:plans.solo.feature1", "Use your own API keys"),
-				t("billing:plans.solo.feature2", "No platform fees"),
-				t("billing:plans.solo.feature3", "Full control over costs"),
-				t("billing:plans.solo.feature4", "Pay providers directly"),
+				t("billing:plans.solo.feature1"),
+				t("billing:plans.solo.feature2"),
+				t("billing:plans.solo.feature3"),
+				t("billing:plans.solo.feature4"),
 			],
-			price: t("billing:plans.solo.price", "Free"),
-			priceDescription: t("billing:plans.solo.priceDescription", "Extension is free"),
-			cta: t("billing:plans.solo.cta", "Use Solo Plan"),
+			price: t("billing:plans.solo.price"),
+			priceDescription: t("billing:plans.solo.priceDescription"),
+			cta: t("billing:plans.solo.cta"),
 		},
 		{
 			id: "pro",
-			name: t("billing:plans.pro.name", "Pro Plan"),
-			description: t("billing:plans.pro.description", "SaaS with token-based billing"),
+			name: t("billing:plans.pro.name"),
+			description: t("billing:plans.pro.description"),
 			features: [
-				t("billing:plans.pro.feature1", "No API key management"),
-				t("billing:plans.pro.feature2", "Pay-as-you-go pricing"),
-				t("billing:plans.pro.feature3", "Multi-currency support (USD, EUR, MAD)"),
-				t("billing:plans.pro.feature4", "Usage dashboard and analytics"),
-				t("billing:plans.pro.feature5", "Stripe & bank wire payments"),
+				t("billing:plans.pro.feature1"),
+				t("billing:plans.pro.feature2"),
+				t("billing:plans.pro.feature3"),
+				t("billing:plans.pro.feature4"),
+				t("billing:plans.pro.feature5"),
 			],
-			price: t("billing:plans.pro.price", "Pay per use"),
-			priceDescription: t("billing:plans.pro.priceDescription", "Token-based billing"),
-			cta: t("billing:plans.pro.cta", "Upgrade to Pro"),
+			price: t("billing:plans.pro.price"),
+			priceDescription: t("billing:plans.pro.priceDescription"),
+			cta: t("billing:plans.pro.cta"),
 			popular: true,
 		},
 	]
@@ -64,15 +65,13 @@ export const PricingPlans: React.FC<PricingPlansProps> = ({ currentPlan, onSelec
 					<Card key={plan.id} className={plan.popular ? "border-primary" : ""}>
 						{plan.popular && (
 							<div className="absolute -top-3 left-1/2 -translate-x-1/2">
-								<Badge variant="default">{t("billing:plans.popular", "Popular")}</Badge>
+								<Badge variant="default">{t("billing:plans.popular")}</Badge>
 							</div>
 						)}
 						<CardHeader>
 							<CardTitle className="flex items-center justify-between">
 								{plan.name}
-								{isCurrent && (
-									<Badge variant="secondary">{t("billing:plans.current", "Current")}</Badge>
-								)}
+								{isCurrent && <Badge variant="secondary">{t("billing:plans.current")}</Badge>}
 							</CardTitle>
 							<CardDescription>{plan.description}</CardDescription>
 						</CardHeader>
@@ -94,7 +93,7 @@ export const PricingPlans: React.FC<PricingPlansProps> = ({ currentPlan, onSelec
 								className="w-full"
 								onClick={() => onSelectPlan(plan.id)}
 								disabled={isCurrent}>
-								{isCurrent ? t("billing:plans.currentPlan", "Current Plan") : plan.cta}
+								{isCurrent ? t("billing:plans.currentPlan") : plan.cta}
 							</Button>
 						</CardContent>
 					</Card>
@@ -103,4 +102,4 @@ export const PricingPlans: React.FC<PricingPlansProps> = ({ currentPlan, onSelec
 		</div>
 	)
 }
-
+// kilocode_change end

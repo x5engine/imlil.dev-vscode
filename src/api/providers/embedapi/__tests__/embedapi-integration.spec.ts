@@ -5,7 +5,7 @@
 
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { EmbedAPIHandler } from "../embedapi-handler"
-import type { ApiHandlerOptions } from "../../../shared/api"
+import type { ApiHandlerOptions } from "../../../../shared/api"
 
 // Mock dependencies
 vi.mock("@embedapi/core", () => ({
@@ -73,14 +73,13 @@ describe("EmbedAPI Integration", () => {
 			vi.spyOn(soloHandler, "getModel").mockReturnValue({
 				id: "claude-3-5-sonnet",
 				info: {
-					id: "claude-3-5-sonnet",
-					name: "Claude 3.5 Sonnet",
+					contextWindow: 200000,
+					supportsPromptCache: true,
 					inputPrice: 3.0,
 					outputPrice: 15.0,
-					contextWindow: 200000,
 					maxTokens: 8192,
-				},
-			})
+				} as any,
+			} as any)
 
 			const cost = soloHandler.getTotalCost(usage as any)
 			expect(cost).toBe(0.05) // Should return upstream cost
@@ -90,14 +89,13 @@ describe("EmbedAPI Integration", () => {
 			vi.spyOn(handler, "getModel").mockReturnValue({
 				id: "claude-3-5-sonnet",
 				info: {
-					id: "claude-3-5-sonnet",
-					name: "Claude 3.5 Sonnet",
+					contextWindow: 200000,
+					supportsPromptCache: true,
 					inputPrice: 3.0,
 					outputPrice: 15.0,
-					contextWindow: 200000,
 					maxTokens: 8192,
-				},
-			})
+				} as any,
+			} as any)
 
 			const usage = {
 				prompt_tokens: 1000000,
@@ -117,14 +115,13 @@ describe("EmbedAPI Integration", () => {
 			vi.spyOn(handler, "getModel").mockReturnValue({
 				id: "claude-3-5-sonnet",
 				info: {
-					id: "claude-3-5-sonnet",
-					name: "Claude 3.5 Sonnet",
+					contextWindow: 200000,
+					supportsPromptCache: true,
 					inputPrice: 3.0,
 					outputPrice: 15.0,
-					contextWindow: 200000,
 					maxTokens: 8192,
-				},
-			})
+				} as any,
+			} as any)
 
 			const usage = {
 				prompt_tokens: 1000,
@@ -144,14 +141,13 @@ describe("EmbedAPI Integration", () => {
 			vi.spyOn(soloHandler, "getModel").mockReturnValue({
 				id: "claude-3-5-sonnet",
 				info: {
-					id: "claude-3-5-sonnet",
-					name: "Claude 3.5 Sonnet",
+					contextWindow: 200000,
+					supportsPromptCache: true,
 					inputPrice: 3.0,
 					outputPrice: 15.0,
-					contextWindow: 200000,
 					maxTokens: 8192,
-				},
-			})
+				} as any,
+			} as any)
 
 			const usage = {
 				prompt_tokens: 1000,
@@ -172,13 +168,12 @@ describe("EmbedAPI Integration", () => {
 			vi.spyOn(handler, "getModel").mockReturnValue({
 				id: "unknown-model",
 				info: {
-					id: "unknown-model",
-					name: "Unknown Model",
 					contextWindow: 200000,
+					supportsPromptCache: true,
 					maxTokens: 8192,
 					// No pricing info
-				},
-			})
+				} as any,
+			} as any)
 
 			const usage = {
 				prompt_tokens: 1000,
@@ -193,14 +188,13 @@ describe("EmbedAPI Integration", () => {
 			vi.spyOn(handler, "getModel").mockReturnValue({
 				id: "claude-3-5-sonnet",
 				info: {
-					id: "claude-3-5-sonnet",
-					name: "Claude 3.5 Sonnet",
+					contextWindow: 200000,
+					supportsPromptCache: true,
 					inputPrice: 3.0,
 					outputPrice: 15.0,
-					contextWindow: 200000,
 					maxTokens: 8192,
-				},
-			})
+				} as any,
+			} as any)
 
 			const usage = {
 				prompt_tokens: 0,
@@ -212,4 +206,3 @@ describe("EmbedAPI Integration", () => {
 		})
 	})
 })
-

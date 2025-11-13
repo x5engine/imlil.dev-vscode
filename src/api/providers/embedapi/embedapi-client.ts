@@ -12,11 +12,7 @@ export class EmbedAPIClient {
 	private apiKey: string
 	private organizationId?: string
 
-	constructor(options: {
-		apiKey: string
-		baseUrl?: string
-		organizationId?: string
-	}) {
+	constructor(options: { apiKey: string; baseUrl?: string; organizationId?: string }) {
 		if (!options.apiKey) {
 			throw new Error("EmbedAPI API key is required")
 		}
@@ -117,7 +113,7 @@ export class EmbedAPIClient {
 
 		// Handle streaming response from @embedapi/core
 		if (stream && typeof stream === "object" && "asyncIterator" in stream) {
-			for await (const chunk of stream as AsyncIterable<any>) {
+			for await (const chunk of stream as unknown as AsyncIterable<any>) {
 				if (chunk?.choices?.[0]?.delta?.content) {
 					yield chunk.choices[0].delta.content
 				}
@@ -128,10 +124,7 @@ export class EmbedAPIClient {
 	/**
 	 * Create embeddings using EmbedAPI
 	 */
-	async createEmbeddings(options: {
-		model: string
-		input: string | string[]
-	}): Promise<any> {
+	async createEmbeddings(options: { model: string; input: string | string[] }): Promise<any> {
 		return this.client.embeddings.create({
 			model: options.model,
 			input: options.input,

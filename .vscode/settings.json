@@ -24,5 +24,9 @@
 	"markdown.copyFiles.destination": {
 		"**/*": "/static/img/${documentBaseName}/${documentBaseName}.${fileName/(.*)\\.(.*)/$2/}"
 	},
-	"java.configuration.updateBuildConfiguration": "interactive"
+	"java.configuration.updateBuildConfiguration": "interactive",
+	// kilocode_change start - ensure Node 20.19.2 is used via nvm
+	"terminal.integrated.shellArgs.linux": ["-l", "-i"],
+	"terminal.integrated.loginShell": true
+	// kilocode_change end
 }

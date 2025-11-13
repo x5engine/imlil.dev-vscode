@@ -29,6 +29,7 @@ import {
 	BalanceDataResponsePayload,
 	TaskHistoryResponsePayload,
 	TasksByIdResponsePayload,
+	EmbedAPIUsageStatsResponsePayload,
 } from "./WebviewMessage"
 import { ClineRulesToggles } from "./cline-rules"
 import { KiloCodeWrapperProperties } from "./kilocode/wrapper"
@@ -150,6 +151,7 @@ export interface ExtensionMessage {
 		| "mermaidFixResponse" // kilocode_change
 		| "tasksByIdResponse" // kilocode_change
 		| "taskHistoryResponse" // kilocode_change
+		| "embedAPIUsageStatsResponse" // kilocode_change
 		| "shareTaskSuccess"
 		| "codeIndexSettingsSaved"
 		| "codeIndexSecretStatus"
@@ -176,6 +178,8 @@ export interface ExtensionMessage {
 		| BalanceDataResponsePayload
 		| TasksByIdResponsePayload
 		| TaskHistoryResponsePayload
+		| EmbedAPIUsageStatsResponsePayload
+	// kilocode_change end
 	// kilocode_change end
 	// Checkpoint warning message
 	checkpointWarning?: {
