@@ -232,6 +232,8 @@ export interface WebviewMessage {
 		| "shopBuyCredits" // kilocode_change
 		| "balanceDataResponse" // kilocode_change
 		| "updateProfileData" // kilocode_change
+		| "fetchEmbedAPIUsageStats" // EmbedAPI billing
+		| "embedAPIUsageStatsResponse" // EmbedAPI billing
 		| "condense" // kilocode_change
 		| "toggleWorkflow" // kilocode_change
 		| "refreshRules" // kilocode_change
@@ -451,6 +453,24 @@ export interface BalanceDataResponsePayload {
 	error?: string
 }
 
+// EmbedAPI Billing Payloads
+export interface EmbedAPIUsageStatsPayload {
+	period: "day" | "week" | "month" | "all"
+}
+
+export interface EmbedAPIUsageStatsResponsePayload {
+	success: boolean
+	stats?: {
+		totalCost: number
+		totalInputTokens: number
+		totalOutputTokens: number
+		totalRequests: number
+		currency: "USD" | "EUR" | "MAD"
+		period: "day" | "week" | "month" | "all"
+	}
+	error?: string
+}
+
 export interface SeeNewChangesPayload {
 	commitRange: CommitRange
 }
@@ -535,6 +555,9 @@ export type WebViewMessagePayload =
 	| TasksByIdRequestPayload
 	| TaskHistoryRequestPayload
 	// kilocode_change end
+	// EmbedAPI Billing
+	| EmbedAPIUsageStatsPayload
+	| EmbedAPIUsageStatsResponsePayload
 	| CheckpointDiffPayload
 	| CheckpointRestorePayload
 	| IndexingStatusPayload

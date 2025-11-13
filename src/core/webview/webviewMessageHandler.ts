@@ -3977,5 +3977,32 @@ export const webviewMessageHandler = async (
 			})
 			break
 		}
+		// EmbedAPI Billing Handlers
+		case "fetchEmbedAPIUsageStats": {
+			try {
+				const { EmbedAPIUsageTracker } = await import("../../core/billing/usage-tracker")
+				const tracker = EmbedAPIUsageTracker.getInstance()
+				const period = (message.payload as any)?.period || "month"
+				const stats = tracker.getUsageStats(period)
+				
+				await provider.postMessageToWebview({
+					type: "embedAPIUsageStatsResponse",
+					payload: {
+						success: true,
+						stats,
+					},
+				})
+			} catch (error: any) {
+				provider.log(`Error fetching EmbedAPI usage stats: ${error.message}`)
+				await provider.postMessageToWebview({
+					type: "embedAPIUsageStatsResponse",
+					payload: {
+						success: false,
+						error: error.message || "Failed to fetch usage statistics",
+					},
+				})
+			}
+			break
+		}
 	}
 }

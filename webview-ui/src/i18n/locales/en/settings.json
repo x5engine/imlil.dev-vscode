@@ -28,6 +28,7 @@
 		"display": "Display",
 		"notifications": "Notifications",
 		"contextManagement": "Context",
+		"billing": "Billing & Usage",
 		"terminal": "Terminal",
 		"slashCommands": "Slash Commands",
 		"prompts": "Prompts",

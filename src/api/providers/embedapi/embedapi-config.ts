@@ -8,6 +8,7 @@ export const EMBEDAPI_DEFAULT_CHAT_ENDPOINT = "/chat/completions"
 export const EMBEDAPI_DEFAULT_EMBEDDINGS_ENDPOINT = "/embeddings"
 export const EMBEDAPI_DEFAULT_FIM_ENDPOINT = "/fim/completions"
 export const EMBEDAPI_DEFAULT_MODELS_ENDPOINT = "/models"
+export const EMBEDAPI_BILLING_URL = "https://app.embedapi.com/billing" // Billing website URL
 
 /**
  * Get EmbedAPI base URL from token or use default

@@ -10,6 +10,7 @@ import { streamSse } from "../../services/continuedev/core/fetch/stream"
 import { EmbedAPIClient } from "./embedapi-client"
 import { getEmbedAPIBaseUrl, EMBEDAPI_DEFAULT_FIM_ENDPOINT } from "./embedapi-config"
 import { getPlanType, calculateCost, PricingInfo, Currency } from "./pricing"
+import { EmbedAPIUsageTracker } from "../../core/billing/usage-tracker"
 
 /**
  * EmbedAPI Handler
@@ -96,16 +97,58 @@ export class EmbedAPIHandler extends OpenRouterHandler {
 			currency: "USD" as Currency, // Default to USD, can be enhanced to detect from model
 		}
 		
+		// Extract cache tokens from prompt_tokens_details if available
+		const cacheReadTokens = lastUsage.prompt_tokens_details?.cached_tokens
+		const cacheWriteTokens = undefined // Cache write tokens not in CompletionUsage, would need to be tracked separately
+		
 		// Calculate cost based on usage
 		const usageCost = calculateCost(
 			lastUsage.prompt_tokens || 0,
 			lastUsage.completion_tokens || 0,
 			pricing,
-			lastUsage.cache_read_tokens,
-			lastUsage.cache_write_tokens
+			cacheReadTokens,
+			cacheWriteTokens
 		)
 		
+		// Record usage for Pro plan users
+		if (planType === "pro") {
+			this.recordUsage({
+				model: this.getModel().id,
+				inputTokens: lastUsage.prompt_tokens || 0,
+				outputTokens: lastUsage.completion_tokens || 0,
+				cacheReadTokens,
+				cacheWriteTokens,
+				cost: usageCost.totalCost,
+				currency: pricing.currency,
+				planType: "pro",
+			}).catch((error) => {
+				console.error("Failed to record usage:", error)
+			})
+		}
+		
 		return usageCost.totalCost
+	}
+
+	/**
+	 * Record usage event for tracking and billing
+	 */
+	private async recordUsage(event: {
+		model: string
+		inputTokens: number
+		outputTokens: number
+		cacheReadTokens?: number
+		cacheWriteTokens?: number
+		cost: number
+		currency: Currency
+		planType: "solo" | "pro"
+	}): Promise<void> {
+		try {
+			const tracker = EmbedAPIUsageTracker.getInstance()
+			await tracker.recordUsage(event)
+		} catch (error) {
+			// Silently fail - usage tracking shouldn't break the main flow
+			console.warn("Failed to record EmbedAPI usage:", error)
+		}
 	}
 
 	override getModel() {

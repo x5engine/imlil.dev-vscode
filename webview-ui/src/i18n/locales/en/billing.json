@@ -1,0 +1,59 @@
+{
+	"solo": {
+		"title": "Solo Plan (BYOK)",
+		"description": "You're using your own API keys. No usage tracking or billing through Imlil.dev."
+	},
+	"usage": {
+		"title": "Usage Dashboard",
+		"description": "Track your EmbedAPI Pro plan usage and costs",
+		"noData": "No usage data available"
+	},
+	"period": {
+		"day": "Past Day",
+		"week": "Past Week",
+		"month": "Past Month",
+		"all": "All Time"
+	},
+	"metrics": {
+		"totalCost": "Total Cost",
+		"totalTokens": "Total Tokens",
+		"totalRequests": "Total Requests",
+		"avgCost": "Avg Cost/Request"
+	},
+	"plans": {
+		"solo": {
+			"name": "Solo Plan",
+			"description": "Bring Your Own Key (BYOK)",
+			"feature1": "Use your own API keys",
+			"feature2": "No platform fees",
+			"feature3": "Full control over costs",
+			"feature4": "Pay providers directly",
+			"price": "Free",
+			"priceDescription": "Extension is free",
+			"cta": "Use Solo Plan"
+		},
+		"pro": {
+			"name": "Pro Plan",
+			"description": "SaaS with token-based billing",
+			"feature1": "No API key management",
+			"feature2": "Pay-as-you-go pricing",
+			"feature3": "Multi-currency support (USD, EUR, MAD)",
+			"feature4": "Usage dashboard and analytics",
+			"feature5": "Stripe & bank wire payments",
+			"price": "Pay per use",
+			"priceDescription": "Token-based billing",
+			"cta": "Upgrade to Pro"
+		},
+		"popular": "Popular",
+		"current": "Current",
+		"currentPlan": "Current Plan"
+	},
+	"payment": {
+		"title": "Add Credits",
+		"description": "Manage your billing and add credits through the EmbedAPI website. The API will return an error when credits are consumed.",
+		"websiteNote": "All payments and billing management are handled on the EmbedAPI website. Click below to open the billing page.",
+		"openBilling": "Open Billing Page",
+		"errorNote": "Note: If you run out of credits, the API will return an error. Add credits on the website to continue using the service."
+	}
+}
+

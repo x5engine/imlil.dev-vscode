@@ -17,6 +17,7 @@ import KiloCodeAuth from "../common/KiloCodeAuth"
 import { OrganizationSelector } from "../common/OrganizationSelector"
 import { getAppUrl, TelemetryEventName } from "@roo-code/types"
 import { telemetryClient } from "@/utils/TelemetryClient"
+import { UsageDashboard, PricingPlans, PaymentMethod } from "@src/components/billing"
 
 interface ProfileViewProps {
 	onDone: () => void
@@ -74,6 +75,25 @@ const ProfileView: React.FC<ProfileViewProps> = ({ onDone }) => {
 	}, [profileData])
 
 	const user = profileData?.user
+
+	// Determine EmbedAPI plan type
+	// Solo = BYOK (user provides their own API keys)
+	// Pro = SaaS (user pays through EmbedAPI)
+	const embedApiPlanType: "solo" | "pro" | null = apiConfiguration?.embedApiToken
+		? (apiConfiguration.embedApiPlan || "solo") // Default to solo if token exists but no plan specified
+		: null
+
+	const handlePlanChange = (plan: "solo" | "pro") => {
+		// Update API configuration with new plan
+		vscode.postMessage({
+			type: "upsertApiConfiguration",
+			text: currentApiConfigName,
+			apiConfiguration: {
+				...apiConfiguration,
+				embedApiPlan: plan,
+			},
+		})
+	}
 
 	function handleLogout(): void {
 		console.info("Logging out...", apiConfiguration)
@@ -203,6 +223,27 @@ const ProfileView: React.FC<ProfileViewProps> = ({ onDone }) => {
 										)
 									)}
 								</div>
+
+								<VSCodeDivider className="w-full my-6" />
+
+								{/* EmbedAPI Billing Section */}
+								{embedApiPlanType && (
+									<div className="w-full mb-6">
+										<UsageDashboard planType={embedApiPlanType} />
+									</div>
+								)}
+
+								{embedApiPlanType === "pro" && (
+									<div className="w-full mb-6">
+										<PaymentMethod />
+									</div>
+								)}
+
+								{!embedApiPlanType && apiConfiguration?.embedApiToken && (
+									<div className="w-full mb-6">
+										<PricingPlans currentPlan={embedApiPlanType || undefined} onSelectPlan={handlePlanChange} />
+									</div>
+								)}
 
 								<VSCodeDivider className="w-full my-6" />
 

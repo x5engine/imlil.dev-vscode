@@ -1,0 +1,59 @@
+{
+	"solo": {
+		"title": "Plan Solo (BYOK)",
+		"description": "Vous utilisez vos propres clés API. Aucun suivi d'utilisation ou facturation via Imlil.dev."
+	},
+	"usage": {
+		"title": "Tableau de bord d'utilisation",
+		"description": "Suivez votre utilisation et vos coûts du plan EmbedAPI Pro",
+		"noData": "Aucune donnée d'utilisation disponible"
+	},
+	"period": {
+		"day": "Dernier jour",
+		"week": "Dernière semaine",
+		"month": "Dernier mois",
+		"all": "Tout le temps"
+	},
+	"metrics": {
+		"totalCost": "Coût total",
+		"totalTokens": "Total de jetons",
+		"totalRequests": "Total de requêtes",
+		"avgCost": "Coût moyen/Requête"
+	},
+	"plans": {
+		"solo": {
+			"name": "Plan Solo",
+			"description": "Apportez votre propre clé (BYOK)",
+			"feature1": "Utilisez vos propres clés API",
+			"feature2": "Aucun frais de plateforme",
+			"feature3": "Contrôle total des coûts",
+			"feature4": "Payez les fournisseurs directement",
+			"price": "Gratuit",
+			"priceDescription": "L'extension est gratuite",
+			"cta": "Utiliser le plan Solo"
+		},
+		"pro": {
+			"name": "Plan Pro",
+			"description": "SaaS avec facturation basée sur les jetons",
+			"feature1": "Pas de gestion de clés API",
+			"feature2": "Tarification à l'utilisation",
+			"feature3": "Support multi-devises (USD, EUR, MAD)",
+			"feature4": "Tableau de bord et analyses d'utilisation",
+			"feature5": "Paiements Stripe et virement bancaire",
+			"price": "Payer à l'utilisation",
+			"priceDescription": "Facturation basée sur les jetons",
+			"cta": "Passer au plan Pro"
+		},
+		"popular": "Populaire",
+		"current": "Actuel",
+		"currentPlan": "Plan actuel"
+	},
+	"payment": {
+		"title": "Ajouter des crédits",
+		"description": "Gérez votre facturation et ajoutez des crédits via le site Web EmbedAPI. L'API renverra une erreur lorsque les crédits sont consommés.",
+		"websiteNote": "Tous les paiements et la gestion de la facturation sont gérés sur le site Web EmbedAPI. Cliquez ci-dessous pour ouvrir la page de facturation.",
+		"openBilling": "Ouvrir la page de facturation",
+		"errorNote": "Note: Si vous manquez de crédits, l'API renverra une erreur. Ajoutez des crédits sur le site Web pour continuer à utiliser le service."
+	}
+}
+

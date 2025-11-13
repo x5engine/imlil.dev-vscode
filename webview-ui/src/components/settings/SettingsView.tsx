@@ -25,6 +25,7 @@ import {
 	Bot, // kilocode_change
 	MessageSquare,
 	Monitor,
+	CreditCard,
 	LucideIcon,
 	// SquareSlash, // kilocode_change
 	// Glasses, // kilocode_change
@@ -78,6 +79,7 @@ import deepEqual from "fast-deep-equal" // kilocode_change
 import { GhostServiceSettingsView } from "../kilocode/settings/GhostServiceSettings" // kilocode_change
 import { SlashCommandsSettings } from "./SlashCommandsSettings"
 import { UISettings } from "./UISettings"
+import { BillingSettings } from "./BillingSettings"
 
 export const settingsTabsContainer = "flex flex-1 overflow-hidden [&.narrow_.tab-label]:hidden"
 export const settingsTabList =
@@ -105,6 +107,7 @@ const sectionNames = [
 	"ui",
 	"experimental",
 	"language",
+	"billing", // EmbedAPI billing
 	"mcp",
 	"about",
 ] as const
@@ -655,6 +658,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 			// { id: "ui", icon: Glasses }, // kilocode_change: we have our own display section
 			{ id: "experimental", icon: FlaskConical },
 			{ id: "language", icon: Globe },
+			{ id: "billing", icon: CreditCard }, // EmbedAPI billing
 			{ id: "mcp", icon: Server },
 			{ id: "about", icon: Info },
 		],
@@ -1041,6 +1045,9 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 					{activeTab === "language" && (
 						<LanguageSettings language={language || "en"} setCachedStateField={setCachedStateField} />
 					)}
+
+					{/* Billing Section */}
+					{activeTab === "billing" && <BillingSettings />}
 
 					{/* kilocode_change */}
 					{/* MCP Section */}
