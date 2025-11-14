@@ -7,17 +7,17 @@ import { EmbedAPIUsageTracker } from "../usage-tracker"
 import type { ExtensionContext, Memento } from "vscode"
 
 // Mock VS Code ExtensionContext
-const mockMemento: Memento = {
+const mockMemento: Memento & { setKeysForSync(keys: readonly string[]): void } = {
 	get: vi.fn(() => []),
 	update: vi.fn(),
 	keys: vi.fn(() => []),
+	setKeysForSync: vi.fn(),
 }
 
 const mockContext: ExtensionContext = {
 	globalState: mockMemento,
 	workspaceState: mockMemento,
 	subscriptions: [],
-	workspaceFolders: [],
 	extensionPath: "",
 	extensionUri: {} as any,
 	environmentVariableCollection: {} as any,
@@ -27,10 +27,12 @@ const mockContext: ExtensionContext = {
 	storageUri: {} as any,
 	globalStoragePath: "",
 	logPath: "",
+	storagePath: "",
 	extension: {} as any,
 	secrets: {} as any,
+	languageModelAccessInformation: {} as any,
 	asAbsolutePath: vi.fn((path: string) => path),
-}
+} as any
 
 describe("EmbedAPIUsageTracker", () => {
 	beforeEach(() => {
@@ -62,7 +64,7 @@ describe("EmbedAPIUsageTracker", () => {
 	describe("Usage Recording", () => {
 		it("should record usage event", async () => {
 			const tracker = EmbedAPIUsageTracker.initialize(mockContext)
-			
+
 			await tracker.recordUsage({
 				model: "claude-3-5-sonnet",
 				inputTokens: 1000,
@@ -77,7 +79,7 @@ describe("EmbedAPIUsageTracker", () => {
 
 		it("should include cache tokens if provided", async () => {
 			const tracker = EmbedAPIUsageTracker.initialize(mockContext)
-			
+
 			await tracker.recordUsage({
 				model: "claude-3-5-sonnet",
 				inputTokens: 1000,
@@ -96,7 +98,7 @@ describe("EmbedAPIUsageTracker", () => {
 	describe("Usage Statistics", () => {
 		it("should return usage stats for a period", () => {
 			const tracker = EmbedAPIUsageTracker.initialize(mockContext)
-			
+
 			// Mock stored events
 			vi.mocked(mockMemento.get).mockReturnValue([
 				{
@@ -132,7 +134,7 @@ describe("EmbedAPIUsageTracker", () => {
 	describe("Usage Events", () => {
 		it("should return usage events for a period", () => {
 			const tracker = EmbedAPIUsageTracker.initialize(mockContext)
-			
+
 			vi.mocked(mockMemento.get).mockReturnValue([
 				{
 					timestamp: Date.now() - 1000,
@@ -153,7 +155,7 @@ describe("EmbedAPIUsageTracker", () => {
 	describe("Cost Calculation", () => {
 		it("should return total cost for a period", () => {
 			const tracker = EmbedAPIUsageTracker.initialize(mockContext)
-			
+
 			vi.mocked(mockMemento.get).mockReturnValue([
 				{
 					timestamp: Date.now() - 1000,
@@ -174,13 +176,9 @@ describe("EmbedAPIUsageTracker", () => {
 	describe("Data Management", () => {
 		it("should clear all usage data", async () => {
 			const tracker = EmbedAPIUsageTracker.initialize(mockContext)
-			
+
 			await tracker.clearAllUsage()
-			expect(mockMemento.update).toHaveBeenCalledWith(
-				"imlildev.embedapi.usage.v1",
-				undefined,
-			)
+			expect(mockMemento.update).toHaveBeenCalledWith("imlildev.embedapi.usage.v1", undefined)
 		})
 	})
 })
-

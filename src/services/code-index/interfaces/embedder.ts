@@ -36,6 +36,7 @@ export type AvailableEmbedders =
 	| "mistral"
 	| "vercel-ai-gateway"
 	| "openrouter"
+	| "embedapi" // kilocode_change
 
 export interface EmbedderInfo {
 	name: AvailableEmbedders

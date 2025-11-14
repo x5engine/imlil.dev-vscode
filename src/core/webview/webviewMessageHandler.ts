@@ -813,6 +813,7 @@ export const webviewMessageHandler = async (
 						inception: {},
 						kilocode: {},
 						gemini: {},
+						embedapi: {}, // kilocode_change
 						// kilocode_change end
 						openrouter: {},
 						"vercel-ai-gateway": {},
@@ -3984,7 +3985,7 @@ export const webviewMessageHandler = async (
 				const tracker = EmbedAPIUsageTracker.getInstance()
 				const period = (message.payload as any)?.period || "month"
 				const stats = tracker.getUsageStats(period)
-				
+
 				await provider.postMessageToWebview({
 					type: "embedAPIUsageStatsResponse",
 					payload: {

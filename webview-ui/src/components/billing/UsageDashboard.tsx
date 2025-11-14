@@ -1,10 +1,31 @@
 import React, { useState, useEffect } from "react"
 import { vscode } from "@/utils/vscode"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui"
-import { Select } from "@/components/ui/select"
 import { useAppTranslation } from "@/i18n/TranslationContext"
-import { formatCost, Currency } from "../../../src/api/providers/embedapi/pricing"
+
+// kilocode_change start - billing components
+type Currency = "USD" | "EUR" | "MAD"
+
+function getCurrencySymbol(currency: Currency): string {
+	switch (currency) {
+		case "USD":
+			return "$"
+		case "EUR":
+			return "€"
+		case "MAD":
+			return "د.م."
+		default:
+			return "$"
+	}
+}
+
+function formatCost(cost: number, currency: Currency): string {
+	const symbol = getCurrencySymbol(currency)
+	const formatted = cost.toFixed(6)
+	const trimmed = formatted.replace(/\.?0+$/, "")
+	return `${symbol}${trimmed}`
+}
+// kilocode_change end
 
 interface UsageStats {
 	totalCost: number
@@ -26,16 +47,12 @@ export const UsageDashboard: React.FC<UsageDashboardProps> = ({ planType }) => {
 	const [isLoading, setIsLoading] = useState(true)
 
 	useEffect(() => {
-		fetchUsageStats()
-	}, [period])
-
-	const fetchUsageStats = async () => {
 		setIsLoading(true)
 		vscode.postMessage({
 			type: "fetchEmbedAPIUsageStats",
 			payload: { period },
 		})
-	}
+	}, [period])
 
 	useEffect(() => {
 		const handleMessage = (event: MessageEvent) => {
@@ -54,13 +71,8 @@ export const UsageDashboard: React.FC<UsageDashboardProps> = ({ planType }) => {
 		return (
 			<Card>
 				<CardHeader>
-					<CardTitle>{t("billing:solo.title", "Solo Plan (BYOK)")}</CardTitle>
-					<CardDescription>
-						{t(
-							"billing:solo.description",
-							"You're using your own API keys. No usage tracking or billing through Imlil.dev.",
-						)}
-					</CardDescription>
+					<CardTitle>{t("billing:solo.title")}</CardTitle>
+					<CardDescription>{t("billing:solo.description")}</CardDescription>
 				</CardHeader>
 			</Card>
 		)
@@ -72,54 +84,46 @@ export const UsageDashboard: React.FC<UsageDashboardProps> = ({ planType }) => {
 				<CardHeader>
 					<div className="flex items-center justify-between">
 						<div>
-							<CardTitle>{t("billing:usage.title", "Usage Dashboard")}</CardTitle>
-							<CardDescription>
-								{t("billing:usage.description", "Track your EmbedAPI Pro plan usage and costs")}
-							</CardDescription>
+							<CardTitle>{t("billing:usage.title")}</CardTitle>
+							<CardDescription>{t("billing:usage.description")}</CardDescription>
 						</div>
-						<Select
-							value={period}
-							onValueChange={(value) => setPeriod(value as typeof period)}
-							options={[
-								{ value: "day", label: t("billing:period.day", "Past Day") },
-								{ value: "week", label: t("billing:period.week", "Past Week") },
-								{ value: "month", label: t("billing:period.month", "Past Month") },
-								{ value: "all", label: t("billing:period.all", "All Time") },
-							]}
-						/>
+						<div className="space-y-1">
+							<label className="text-xs font-medium">{t("billing:usage.period")}</label>
+							<select
+								className="px-2 py-1 text-sm rounded border border-gray-300"
+								value={period}
+								onChange={(e) => setPeriod(e.target.value as typeof period)}>
+								<option value="day">{t("billing:period.day")}</option>
+								<option value="week">{t("billing:period.week")}</option>
+								<option value="month">{t("billing:period.month")}</option>
+								<option value="all">{t("billing:period.all")}</option>
+							</select>
+						</div>
 					</div>
 				</CardHeader>
 				<CardContent>
 					{isLoading ? (
-						<div className="text-center py-8">{t("common:loading", "Loading...")}</div>
+						<div className="text-center py-8">{t("common:loading")}</div>
 					) : stats ? (
 						<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 							<div className="space-y-1">
-								<div className="text-sm text-muted-foreground">
-									{t("billing:metrics.totalCost", "Total Cost")}
-								</div>
-								<div className="text-2xl font-bold">
-									{formatCost(stats.totalCost, stats.currency)}
-								</div>
+								<div className="text-sm text-muted-foreground">{t("billing:metrics.totalCost")}</div>
+								<div className="text-2xl font-bold">{formatCost(stats.totalCost, stats.currency)}</div>
 							</div>
 							<div className="space-y-1">
-								<div className="text-sm text-muted-foreground">
-									{t("billing:metrics.totalTokens", "Total Tokens")}
-								</div>
+								<div className="text-sm text-muted-foreground">{t("billing:metrics.totalTokens")}</div>
 								<div className="text-2xl font-bold">
 									{(stats.totalInputTokens + stats.totalOutputTokens).toLocaleString()}
 								</div>
 							</div>
 							<div className="space-y-1">
 								<div className="text-sm text-muted-foreground">
-									{t("billing:metrics.totalRequests", "Total Requests")}
+									{t("billing:metrics.totalRequests")}
 								</div>
 								<div className="text-2xl font-bold">{stats.totalRequests.toLocaleString()}</div>
 							</div>
 							<div className="space-y-1">
-								<div className="text-sm text-muted-foreground">
-									{t("billing:metrics.avgCost", "Avg Cost/Request")}
-								</div>
+								<div className="text-sm text-muted-foreground">{t("billing:metrics.avgCost")}</div>
 								<div className="text-2xl font-bold">
 									{stats.totalRequests > 0
 										? formatCost(stats.totalCost / stats.totalRequests, stats.currency)
@@ -128,13 +132,10 @@ export const UsageDashboard: React.FC<UsageDashboardProps> = ({ planType }) => {
 							</div>
 						</div>
 					) : (
-						<div className="text-center py-8 text-muted-foreground">
-							{t("billing:usage.noData", "No usage data available")}
-						</div>
+						<div className="text-center py-8 text-muted-foreground">{t("billing:usage.noData")}</div>
 					)}
 				</CardContent>
 			</Card>
 		</div>
 	)
 }
-

@@ -41,6 +41,7 @@ export const OpenAIConfigSchema = BasePlusConfig.extend({
 		z.literal("ncompass"),
 		z.literal("relace"),
 		z.literal("huggingface-inference-api"),
+		z.literal("embedapi"), // kilocode_change
 	]),
 })
 export type OpenAIConfig = z.infer<typeof OpenAIConfigSchema>

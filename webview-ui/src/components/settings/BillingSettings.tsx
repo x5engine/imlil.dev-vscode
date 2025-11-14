@@ -1,8 +1,10 @@
 import React from "react"
 import { useExtensionState } from "@/context/ExtensionStateContext"
 import { useAppTranslation } from "@/i18n/TranslationContext"
+import { vscode } from "@/utils/vscode"
 import { Section } from "./Section"
 import { SectionHeader } from "./SectionHeader"
+// kilocode_change start - billing components
 import { UsageDashboard, PricingPlans, PaymentMethod } from "@src/components/billing"
 
 export const BillingSettings: React.FC = () => {
@@ -13,7 +15,7 @@ export const BillingSettings: React.FC = () => {
 	// Solo = BYOK (user provides their own API keys)
 	// Pro = SaaS (user pays through EmbedAPI)
 	const embedApiPlanType: "solo" | "pro" | null = apiConfiguration?.embedApiToken
-		? (apiConfiguration.embedApiPlan || "solo") // Default to solo if token exists but no plan specified
+		? apiConfiguration.embedApiPlan || "solo" // Default to solo if token exists but no plan specified
 		: null
 
 	const handlePlanChange = (plan: "solo" | "pro") => {
@@ -30,21 +32,15 @@ export const BillingSettings: React.FC = () => {
 
 	return (
 		<Section>
-			<SectionHeader
-				title={t("settings:sections.billing", "Billing & Usage")}
-				description={t(
-					"settings:billing.description",
-					"Manage your EmbedAPI plan, view usage statistics, and add credits",
-				)}
-			/>
+			<SectionHeader description={t("settings:billing.description")}>
+				{t("settings:sections.billing")}
+			</SectionHeader>
 
 			<div className="space-y-6">
 				{/* Plan Selection - Show if no plan selected or if user wants to switch */}
 				{!embedApiPlanType && apiConfiguration?.embedApiToken && (
 					<div>
-						<h3 className="text-lg font-semibold mb-4">
-							{t("billing:plans.selectPlan", "Select a Plan")}
-						</h3>
+						<h3 className="text-lg font-semibold mb-4">{t("billing:plans.selectPlan")}</h3>
 						<PricingPlans currentPlan={undefined} onSelectPlan={handlePlanChange} />
 					</div>
 				)}
@@ -52,9 +48,7 @@ export const BillingSettings: React.FC = () => {
 				{/* Usage Dashboard - Show for all plans */}
 				{embedApiPlanType && (
 					<div>
-						<h3 className="text-lg font-semibold mb-4">
-							{t("billing:usage.title", "Usage Dashboard")}
-						</h3>
+						<h3 className="text-lg font-semibold mb-4">{t("billing:usage.title")}</h3>
 						<UsageDashboard planType={embedApiPlanType} />
 					</div>
 				)}
@@ -62,9 +56,7 @@ export const BillingSettings: React.FC = () => {
 				{/* Payment Method - Show only for Pro plan */}
 				{embedApiPlanType === "pro" && (
 					<div>
-						<h3 className="text-lg font-semibold mb-4">
-							{t("billing:payment.title", "Add Credits")}
-						</h3>
+						<h3 className="text-lg font-semibold mb-4">{t("billing:payment.title")}</h3>
 						<PaymentMethod />
 					</div>
 				)}
@@ -72,9 +64,7 @@ export const BillingSettings: React.FC = () => {
 				{/* Plan Information */}
 				{embedApiPlanType && (
 					<div className="border-t pt-6">
-						<h3 className="text-lg font-semibold mb-4">
-							{t("billing:plans.currentPlan", "Current Plan")}
-						</h3>
+						<h3 className="text-lg font-semibold mb-4">{t("billing:plans.currentPlan")}</h3>
 						<PricingPlans currentPlan={embedApiPlanType} onSelectPlan={handlePlanChange} />
 					</div>
 				)}
@@ -82,11 +72,11 @@ export const BillingSettings: React.FC = () => {
 				{/* No EmbedAPI Configuration */}
 				{!apiConfiguration?.embedApiToken && (
 					<div className="text-center py-8 text-muted-foreground">
-						<p>{t("billing:noConfig", "Configure EmbedAPI in the Providers section to enable billing.")}</p>
+						<p>{t("billing:noConfig")}</p>
 					</div>
 				)}
 			</div>
 		</Section>
 	)
 }
-
+// kilocode_change end

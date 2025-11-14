@@ -6,7 +6,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { EmbedAPIHandler } from "../embedapi-handler"
 import { EmbedAPIClient } from "../embedapi-client"
-import type { ApiHandlerOptions } from "../../../shared/api"
+import type { ApiHandlerOptions } from "../../../../shared/api"
 
 // Mock EmbedAPI client
 vi.mock("../embedapi-client", () => ({
@@ -95,14 +95,13 @@ describe("EmbedAPIHandler", () => {
 			vi.spyOn(handler, "getModel").mockReturnValue({
 				id: "claude-3-5-sonnet",
 				info: {
-					id: "claude-3-5-sonnet",
-					name: "Claude 3.5 Sonnet",
+					contextWindow: 200000,
+					supportsPromptCache: true,
 					inputPrice: 3.0, // $3 per million tokens
 					outputPrice: 15.0, // $15 per million tokens
-					contextWindow: 200000,
 					maxTokens: 8192,
-				},
-			})
+				} as any,
+			} as any)
 
 			const cost = handler.getTotalCost(usage as any)
 			expect(cost).toBeGreaterThan(0)
@@ -126,14 +125,13 @@ describe("EmbedAPIHandler", () => {
 			vi.spyOn(soloHandler, "getModel").mockReturnValue({
 				id: "claude-3-5-sonnet",
 				info: {
-					id: "claude-3-5-sonnet",
-					name: "Claude 3.5 Sonnet",
+					contextWindow: 200000,
+					supportsPromptCache: true,
 					inputPrice: 3.0,
 					outputPrice: 15.0,
-					contextWindow: 200000,
 					maxTokens: 8192,
-				},
-			})
+				} as any,
+			} as any)
 
 			const cost = soloHandler.getTotalCost(usage as any)
 			expect(cost).toBe(0.05)
@@ -153,16 +151,13 @@ describe("EmbedAPIHandler", () => {
 			vi.spyOn(handler, "getModel").mockReturnValue({
 				id: "claude-3-5-sonnet",
 				info: {
-					id: "claude-3-5-sonnet",
-					name: "Claude 3.5 Sonnet",
+					contextWindow: 200000,
+					supportsPromptCache: true,
 					inputPrice: 3.0,
 					outputPrice: 15.0,
-					contextWindow: 200000,
 					maxTokens: 8192,
-				},
-			})
-
-			handler.getTotalCost(usage as any)
+				} as any,
+			} as any)
 
 			// Usage tracking is async, so we just verify the method was called
 			// The actual recording happens in the background
@@ -170,4 +165,3 @@ describe("EmbedAPIHandler", () => {
 		})
 	})
 })
-

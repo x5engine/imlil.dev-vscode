@@ -1,6 +1,6 @@
 /**
  * EmbedAPI Pricing Calculation
- * 
+ *
  * Handles pricing for both Solo (BYOK) and Pro (SaaS) plans
  * Supports multi-currency: USD, EUR, MAD (Moroccan Dirham)
  */
@@ -30,11 +30,11 @@ export interface UsageCost {
  */
 export function parsePrice(priceString?: string): number {
 	if (!priceString) return 0
-	
+
 	// Remove currency symbols and whitespace
 	const cleaned = priceString.replace(/[$€£,\s]/g, "")
 	const parsed = parseFloat(cleaned)
-	
+
 	return isNaN(parsed) ? 0 : parsed
 }
 
@@ -46,24 +46,24 @@ export function calculateCost(
 	outputTokens: number,
 	pricing: PricingInfo,
 	cacheReadTokens?: number,
-	cacheWriteTokens?: number
+	cacheWriteTokens?: number,
 ): UsageCost {
 	const inputCost = (inputTokens / 1_000_000) * pricing.inputPrice
 	const outputCost = (outputTokens / 1_000_000) * pricing.outputPrice
-	
+
 	let cacheReadCost = 0
 	let cacheWriteCost = 0
-	
+
 	if (cacheReadTokens && pricing.cacheReadPrice) {
 		cacheReadCost = (cacheReadTokens / 1_000_000) * pricing.cacheReadPrice
 	}
-	
+
 	if (cacheWriteTokens && pricing.cacheWritePrice) {
 		cacheWriteCost = (cacheWriteTokens / 1_000_000) * pricing.cacheWritePrice
 	}
-	
+
 	const totalCost = inputCost + outputCost + cacheReadCost + cacheWriteCost
-	
+
 	return {
 		inputCost,
 		outputCost,
@@ -80,10 +80,10 @@ export function calculateCost(
 export function formatCost(cost: number, currency: Currency): string {
 	const symbol = getCurrencySymbol(currency)
 	const formatted = cost.toFixed(6) // Show 6 decimal places for precision
-	
+
 	// Remove trailing zeros
 	const trimmed = formatted.replace(/\.?0+$/, "")
-	
+
 	return `${symbol}${trimmed}`
 }
 
@@ -107,29 +107,28 @@ export function getCurrencySymbol(currency: Currency): string {
  * Convert between currencies (basic conversion rates)
  * Note: In production, use real-time exchange rates from an API
  */
-export function convertCurrency(
-	amount: number,
-	from: Currency,
-	to: Currency
-): number {
+export function convertCurrency(amount: number, from: Currency, to: Currency): number {
 	if (from === to) return amount
-	
+
 	// Basic conversion rates (update with real-time rates in production)
 	const rates: Record<Currency, Record<Currency, number>> = {
 		USD: {
+			USD: 1.0,
 			EUR: 0.92,
 			MAD: 10.0,
 		},
 		EUR: {
 			USD: 1.09,
+			EUR: 1.0,
 			MAD: 10.87,
 		},
 		MAD: {
 			USD: 0.1,
 			EUR: 0.092,
+			MAD: 1.0,
 		},
 	}
-	
+
 	const rate = rates[from]?.[to] || 1
 	return amount * rate
 }
@@ -144,12 +143,12 @@ export function getPlanType(embedApiToken?: string, embedApiPlan?: PlanType): Pl
 	if (embedApiPlan) {
 		return embedApiPlan
 	}
-	
+
 	// If token exists but no plan specified, default to Solo (BYOK)
 	if (embedApiToken) {
 		return "solo"
 	}
-	
+
 	// Default to Pro if no token (SaaS mode)
 	return "pro"
 }
@@ -167,4 +166,3 @@ export function isSoloPlan(planType: PlanType): boolean {
 export function isProPlan(planType: PlanType): boolean {
 	return planType === "pro"
 }
-

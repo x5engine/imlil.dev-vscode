@@ -16,6 +16,7 @@ export interface CodeIndexConfig {
 	mistralOptions?: { apiKey: string }
 	vercelAiGatewayOptions?: { apiKey: string }
 	openRouterOptions?: { apiKey: string }
+	embedApiOptions?: { apiKey: string; baseUrl?: string } // kilocode_change
 	qdrantUrl?: string
 	qdrantApiKey?: string
 	searchMinScore?: number
@@ -39,6 +40,8 @@ export type PreviousConfigSnapshot = {
 	mistralApiKey?: string
 	vercelAiGatewayApiKey?: string
 	openRouterApiKey?: string
+	embedApiKey?: string // kilocode_change
+	embedApiBaseUrl?: string // kilocode_change
 	qdrantUrl?: string
 	qdrantApiKey?: string
 }

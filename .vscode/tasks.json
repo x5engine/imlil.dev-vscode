@@ -2,6 +2,12 @@
 // for the documentation about the tasks.json format
 {
 	"version": "2.0.0",
+	"options": {
+		"shell": {
+			"executable": "/bin/bash",
+			"args": ["-l", "-i", "-c"]
+		}
+	},
 	"tasks": [
 		{
 			"label": "watch",
@@ -20,19 +26,12 @@
 		{
 			"label": "watch:pnpm",
 			"type": "shell",
-			"command": "npx",
+			"command": "bash",
 			"args": [
-				"nodemon",
-				"--watch",
-				"package.json",
-				"--watch",
-				"src/package.json",
-				"--watch",
-				"webview-ui/package.json",
-				"--watch",
-				"pnpm-workspace.yaml",
-				"--exec",
-				"pnpm install"
+				"-l",
+				"-i",
+				"-c",
+				"nvm use 20.19.2 && pnpm exec nodemon --watch package.json --watch src/package.json --watch webview-ui/package.json --watch pnpm-workspace.yaml --exec 'pnpm install'"
 			],
 			"group": "none",
 			"isBackground": true,
@@ -53,7 +52,8 @@
 			"label": "watch:webview",
 			"dependsOn": ["watch:pnpm"],
 			"type": "shell",
-			"command": "pnpm --filter @roo-code/vscode-webview dev",
+			"command": "bash",
+			"args": ["-l", "-i", "-c", "nvm use 20.19.2 && pnpm --filter @roo-code/vscode-webview dev"],
 			"group": "build",
 			"problemMatcher": {
 				"owner": "vite",
@@ -74,7 +74,8 @@
 			"label": "watch:bundle",
 			"dependsOn": ["watch:pnpm"],
 			"type": "shell",
-			"command": "npx turbo watch:bundle",
+			"command": "bash",
+			"args": ["-l", "-i", "-c", "nvm use 20.19.2 && pnpm exec turbo watch:bundle"],
 			"group": "build",
 			"problemMatcher": {
 				"owner": "esbuild",
@@ -97,7 +98,8 @@
 			"label": "watch:tsc",
 			"dependsOn": ["watch:pnpm"],
 			"type": "shell",
-			"command": "npx turbo watch:tsc",
+			"command": "bash",
+			"args": ["-l", "-i", "-c", "nvm use 20.19.2 && pnpm exec turbo watch:tsc"],
 			"group": "none",
 			"problemMatcher": "$tsc-watch",
 			"isBackground": true,
@@ -109,7 +111,13 @@
 		{
 			"label": "storybook",
 			"type": "shell",
-			"command": "kill -9 $(lsof -t -i tcp:6006) 2>/dev/null || true && npx turbo storybook",
+			"command": "bash",
+			"args": [
+				"-l",
+				"-i",
+				"-c",
+				"nvm use 20.19.2 && kill -9 $(lsof -t -i tcp:6006) 2>/dev/null || true && pnpm exec turbo storybook"
+			],
 			"group": "build",
 			"problemMatcher": {
 				"owner": "storybook",

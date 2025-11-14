@@ -1,16 +1,16 @@
-import { ApiHandlerOptions, ModelRecord } from "../../shared/api"
+import { ApiHandlerOptions, ModelRecord } from "../../../shared/api"
 import { CompletionUsage, OpenRouterHandler } from "../openrouter"
-import { getModelParams } from "../transform/model-params"
+import { getModelParams } from "../../transform/model-params"
 import { getModels } from "../fetchers/modelCache"
 import { DEEP_SEEK_DEFAULT_TEMPERATURE, openRouterDefaultModelId, openRouterDefaultModelInfo } from "@roo-code/types"
-import { ApiHandlerCreateMessageMetadata } from "../index"
+import { ApiHandlerCreateMessageMetadata } from "../../index"
 import { getModelEndpoints } from "../fetchers/modelEndpointCache"
 import { DEFAULT_HEADERS } from "../constants"
-import { streamSse } from "../../services/continuedev/core/fetch/stream"
+import { streamSse } from "../../../services/continuedev/core/fetch/stream"
 import { EmbedAPIClient } from "./embedapi-client"
 import { getEmbedAPIBaseUrl, EMBEDAPI_DEFAULT_FIM_ENDPOINT } from "./embedapi-config"
 import { getPlanType, calculateCost, PricingInfo, Currency } from "./pricing"
-import { EmbedAPIUsageTracker } from "../../core/billing/usage-tracker"
+import { EmbedAPIUsageTracker } from "../../../core/billing/usage-tracker"
 
 /**
  * EmbedAPI Handler
@@ -24,28 +24,29 @@ export class EmbedAPIHandler extends OpenRouterHandler {
 	private embedAPIClient: EmbedAPIClient
 
 	protected override get providerName() {
-		return "EmbedAPI" as const
+		return "OpenRouter" as const
 	}
 
 	constructor(options: ApiHandlerOptions) {
-		// Initialize EmbedAPI client
+		// Initialize base options
 		const baseApiUrl = options.embedApiBaseUrl || getEmbedAPIBaseUrl(options.embedApiToken)
-		
-		// Create EmbedAPI client
-		this.embedAPIClient = new EmbedAPIClient({
-			apiKey: options.embedApiToken ?? "",
-			baseUrl: baseApiUrl,
-			organizationId: options.embedApiOrganizationId,
-		})
 
 		// Configure options for OpenRouter-compatible interface
-		options = {
+		const configuredOptions: ApiHandlerOptions = {
 			...options,
 			openRouterBaseUrl: `${baseApiUrl}/openrouter`,
 			openRouterApiKey: options.embedApiToken,
 		}
 
-		super(options)
+		// Call parent constructor first
+		super(configuredOptions)
+
+		// Now initialize EmbedAPI client after super()
+		this.embedAPIClient = new EmbedAPIClient({
+			apiKey: options.embedApiToken ?? "",
+			baseUrl: baseApiUrl,
+			organizationId: options.embedApiOrganizationId,
+		})
 
 		this.apiFIMBase = baseApiUrl
 	}
@@ -75,13 +76,10 @@ export class EmbedAPIHandler extends OpenRouterHandler {
 		if (!model.inputPrice && !model.outputPrice) {
 			return 0
 		}
-		
+
 		// Determine plan type (Solo = BYOK, Pro = SaaS)
-		const planType = getPlanType(
-			this.options.embedApiToken,
-			this.options.embedApiPlan
-		)
-		
+		const planType = getPlanType(this.options.embedApiToken, this.options.embedApiPlan)
+
 		// For BYOK (Solo plan), return upstream cost (user pays provider directly)
 		if (planType === "solo" || lastUsage.is_byok) {
 			return lastUsage.cost_details?.upstream_inference_cost || 0
@@ -96,20 +94,20 @@ export class EmbedAPIHandler extends OpenRouterHandler {
 			cacheWritePrice: model.cacheWritesPrice,
 			currency: "USD" as Currency, // Default to USD, can be enhanced to detect from model
 		}
-		
+
 		// Extract cache tokens from prompt_tokens_details if available
 		const cacheReadTokens = lastUsage.prompt_tokens_details?.cached_tokens
 		const cacheWriteTokens = undefined // Cache write tokens not in CompletionUsage, would need to be tracked separately
-		
+
 		// Calculate cost based on usage
 		const usageCost = calculateCost(
 			lastUsage.prompt_tokens || 0,
 			lastUsage.completion_tokens || 0,
 			pricing,
 			cacheReadTokens,
-			cacheWriteTokens
+			cacheWriteTokens,
 		)
-		
+
 		// Record usage for Pro plan users
 		if (planType === "pro") {
 			this.recordUsage({
@@ -125,7 +123,7 @@ export class EmbedAPIHandler extends OpenRouterHandler {
 				console.error("Failed to record usage:", error)
 			})
 		}
-		
+
 		return usageCost.totalCost
 	}
 
@@ -195,12 +193,12 @@ export class EmbedAPIHandler extends OpenRouterHandler {
 
 		this.models = models
 		this.endpoints = endpoints
-		
+
 		// Set default model if not specified
 		if (!this.options.embedApiModel && Object.keys(models).length > 0) {
 			this.defaultModel = Object.keys(models)[0]
 		}
-		
+
 		return this.getModel()
 	}
 
@@ -229,7 +227,7 @@ export class EmbedAPIHandler extends OpenRouterHandler {
 			...this.embedAPIClient.getHeaders(),
 			...this.customRequestOptions(taskId ? { taskId, mode: "code" } : undefined)?.headers,
 		}
-		
+
 		const max_max_tokens = 1000
 		const response = await fetch(endpoint, {
 			method: "POST",
@@ -265,4 +263,3 @@ export class EmbedAPIHandler extends OpenRouterHandler {
 		return this.embedAPIClient
 	}
 }
-
